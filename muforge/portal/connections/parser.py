@@ -1,19 +1,18 @@
+import typing
+
 from rich.errors import MarkupError
 from rich.markup import escape
 
 
 class BaseParser:
+    """
+    A Portal Parser acts as a kind of "mode" for the connection, such as a login screen or a game screen.
+    They handle events/commands and talk to the HTTP API.
+    """
+
     def __init__(self):
         self.connection: "BaseConnection" = None
         self.index: int = 0
-
-    @property
-    def service(self):
-        return self.connection.service
-
-    @property
-    def plugin(self):
-        return self.connection.plugin
 
     @property
     def app(self):
@@ -57,8 +56,8 @@ class BaseParser:
     async def send_rich(self, *args, **kwargs):
         await self.connection.send_rich(*args, **kwargs)
 
-    async def send_gmcp(self, command: str, data: dict):
-        await self.connection.send_gmcp(command, data)
+    async def send_data(self, package: str, data: typing.Any):
+        await self.connection.send_data(package, data)
 
     async def api_call(self, *args, **kwargs):
         return await self.connection.api_call(*args, **kwargs)

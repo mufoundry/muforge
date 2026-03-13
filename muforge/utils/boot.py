@@ -115,7 +115,10 @@ def get_config(mode: str) -> dict:
     plugin_files = sorted(root_path.glob("plugin-*.toml"))
     files.extend(plugin_files)
 
-    for f in ("secrets",):
+    for f in (
+        "local",
+        "secrets",
+    ):
         config_path = root_path / f"{f}.toml"
         if config_path.exists():
             files.append(config_path)
