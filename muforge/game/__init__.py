@@ -49,41 +49,6 @@ class Application(BaseApplication):
             if hasattr(p, "setup_final"):
                 await p.setup_final()
 
-    async def setup_listeners(self):
-        for k, v in muforge.SETTINGS["GAME"].get("listeners", dict()).items():
-            listener_class = property_from_module(v)
-            listener = listener_class()
-            muforge.LISTENERS[k] = listener
-            for table in listener.tables:
-                muforge.LISTENERS_TABLE[table].append(listener)
-
-    async def handle_postgre_notification(self, conn, pid, channel, payload):
-        decoded = orjson.loads(payload)
-        args = [decoded["table"], decoded["id"]]
-
-        if not (listeners := muforge.LISTENERS_TABLE.get(decoded["table"], [])):
-            return
-
-        match decoded["operation"]:
-            case "UPDATE":
-                for listener in listeners:
-                    await listener.on_update(*args)
-            case "INSERT":
-                for listener in listeners:
-                    await listener.on_insert(*args)
-            case "DELETE":
-                for listener in listeners:
-                    await listener.on_delete(*args)
-
-    async def postgre_listener(self):
-        async with self.db.connection() as conn:
-            await conn.add_listener("table_changes", self.handle_postgre_notification)
-            while True:
-                try:
-                    await asyncio.sleep(10)
-                except asyncio.CancelledError:
-                    break
-
     async def start(self):
         await serve(
             self.fastapi_instance,

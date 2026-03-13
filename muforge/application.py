@@ -124,6 +124,8 @@ class BaseApplication:
     async def setup_classes(self):
         temp_classes = dict()
         for p in self.plugin_load_order:
+            if not hasattr(p, f"{self.name}_classes"):
+                continue
             if classes := getattr(p, f"{self.name}_classes")():
                 for k, v in classes.items():
                     temp_classes[k] = (p, v)
