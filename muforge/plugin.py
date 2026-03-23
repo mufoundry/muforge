@@ -86,6 +86,13 @@ class BasePlugin:
         """
         return dict()
 
+    def game_hooks(self) -> dict[str, typing.Callable]:
+        """
+        Announces hooks for this plugin.
+        The dictionary is in [hook_name, func] format. funcs are callables that take a payload and return an object or None.
+        """
+        return dict()
+
     def portal_classes(self) -> dict[str, type]:
         """
         Announces portal classes for this plugin.
@@ -104,6 +111,13 @@ class BasePlugin:
         """
         Announces portal parsers for this plugin.
         The dictionary is in [name, parser] format. parsers are callables that take the Connection return an object.
+        """
+        return dict()
+
+    def portal_hooks(self) -> dict[str, typing.Callable]:
+        """
+        Announces hooks for this plugin.
+        The dictionary is in [hook_name, func] format. funcs are callables that take a payload and return an object or None.
         """
         return dict()
 

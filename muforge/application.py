@@ -1,4 +1,5 @@
 import asyncio
+from collections import defaultdict
 import ssl
 import sys
 from pathlib import Path
@@ -45,6 +46,7 @@ class BaseApplication:
         self.task_group = None
         self.plugins: dict[str, "Plugin"] = dict()
         self.plugin_load_order = list()
+        self.hooks = defaultdict(list)
 
         self.resolver = None
         self.tls_context = None
@@ -119,7 +121,16 @@ class BaseApplication:
         await self.setup_plugins()
         await self.setup_classes()
         await self.setup_events()
+        await self.setup_hooks()
         await self.setup_services()
+
+    async def setup_hooks(self):
+        for p in self.plugin_load_order:
+            if not hasattr(p, f"{self.name}_hooks"):
+                continue
+            hooks = getattr(p, f"{self.name}_hooks")()
+            for k, v in hooks.items():
+                self.hooks[k].append(v)
 
     async def setup_classes(self):
         temp_classes = dict()
