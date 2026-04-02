@@ -89,16 +89,7 @@ async def assemble_fastapi(parent, config: Config):
     v1 = APIRouter()
     routers = dict()
     for p in parent.plugin_load_order:
-        if p_routers := p.game_routers_v1():
-            for k, v in p_routers.items():
-                if k in routers:
-                    logger.error(
-                        f"Plugin {p.slug()} defines router for prefix /{k}, but it is already defined by another plugin."
-                    )
-                    raise Exception(
-                        f"Plugin {p.slug()} defines router for prefix /{k}, but it is already defined by another plugin."
-                    )
-                routers[k] = v
+        routers.update(p.game_routers_v1())
 
     for k, v in routers.items():
         if not v:

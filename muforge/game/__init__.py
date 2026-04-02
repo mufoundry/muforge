@@ -5,9 +5,7 @@ from hypercorn import Config
 from hypercorn.asyncio import serve
 from loguru import logger
 
-import muforge
 from muforge.application import BaseApplication
-from muforge.utils.misc import property_from_module
 
 from .fastapi import assemble_fastapi
 
