@@ -17,7 +17,7 @@ from muforge.utils.misc import callables_from_module, property_from_module
 
 async def assemble_fastapi(parent, config: Config):
     app = FastAPI()
-    app.state.application = parent
+    app.state.game = parent
 
     app.add_middleware(
         CORSMiddleware,
