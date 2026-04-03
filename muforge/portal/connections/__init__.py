@@ -107,11 +107,6 @@ class BaseConnection:
             raise asyncio.CancelledError()
 
     async def at_capability_change(self, capability: str, value):
-        match capability:
-            case "color":
-                await self.send_line(f"Capability change: {capability} -> {str(value)}")
-            case _:
-                await self.send_line(f"Capability change: {capability} -> {value}")
 
         match capability:
             case "color":
