@@ -42,10 +42,7 @@ class Application(BaseApplication):
         await self.setup_fastapi()
         await self.setup_plugins_final()
 
-    async def setup_plugins_final(self):
-        for p in self.plugin_load_order:
-            if hasattr(p, "setup_final"):
-                await p.setup_final()
+    
 
     async def start(self):
         await serve(

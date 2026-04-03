@@ -22,6 +22,7 @@ class Application(BaseApplication):
     async def setup(self):
         await super().setup()
         await self.setup_parsers()
+        await self.setup_plugins_final()
 
     async def handle_connection(self, link: ConnectionLink):
         conn_class = self.classes.get("connection", BaseConnection)

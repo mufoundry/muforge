@@ -70,7 +70,7 @@ class BaseApplication:
 
         for k, v in self.plugins.items():
             logger.info(f"Found plugin {k} version {v.version()}.")
-            await v.pre_setup()
+            await v.pre_setup(self.name)
 
         remaining = self.plugins.copy()
 
@@ -103,7 +103,7 @@ class BaseApplication:
                 remaining.pop(slug)
 
         for k, v in self.plugins.items():
-            await v.post_setup()
+            await v.post_setup(self.name)
 
     async def setup_tls(self):
         cert = self.complete_settings.get("TLS", dict()).get("certificate", None)
@@ -163,6 +163,7 @@ class BaseApplication:
         valid_services.sort(key=lambda x: x.load_priority)
         logger.info(f"Setting up {len(valid_services)} services...")
         for srv in valid_services:
+            logger.info(f"Setting up service: {srv.__class__.__name__}")
             await srv.setup()
         logger.info("Services setup complete.")
 
@@ -184,6 +185,11 @@ class BaseApplication:
 
     async def start(self):
         pass
+
+    async def setup_plugins_final(self):
+        for p in self.plugin_load_order:
+            if hasattr(p, "setup_final"):
+                await p.setup_final(self.name)
 
     def shutdown(self):
         self.shutdown_event.set()

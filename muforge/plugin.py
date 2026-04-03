@@ -121,20 +121,20 @@ class BasePlugin:
         """
         return dict()
 
-    async def pre_setup(self):
+    async def pre_setup(self, app_name: str):
         """
         This is called before any dependency checks or exports are done. This might be done for customizing
         what the plugin exports based on what other plugins are present.
         """
         pass
 
-    async def post_setup(self):
+    async def post_setup(self, app_name: str):
         """
         This is called after all dependency checks have been resolved.
         """
         pass
 
-    async def setup_final(self):
+    async def setup_final(self, app_name: str):
         """
         This is called when the game has finished loading everything else.
         """
