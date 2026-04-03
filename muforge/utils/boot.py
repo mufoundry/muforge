@@ -128,6 +128,19 @@ def get_config(mode: str) -> dict:
     return d.to_dict()
 
 
+async def get_environment(mode: str):
+    settings = get_config(mode)
+    await setup_program(mode, settings)
+    app_class = property_from_module(
+        settings[mode.upper()].get("class", None)
+    )
+    app = app_class(settings)
+    await app.setup()
+    install_signal_handlers(app)
+
+    return app
+
+
 async def main(mode: str):
     settings = get_config(mode)
     await run_program(mode, settings)
