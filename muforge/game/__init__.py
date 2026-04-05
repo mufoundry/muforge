@@ -23,6 +23,9 @@ class Application(BaseApplication):
         self.fastapi_config = Config()
         self.fastapi_config.title = self.complete_settings["MUFORGE"]["name"]
 
+        self.fastapi_config.websocket_ping_interval = 30
+        self.fastapi_config.websocket_ping_timeout = 10
+
         external = settings["bind_address"]
         bind_to = f"{external}:{settings['port']}"
         self.fastapi_config.bind = [bind_to]

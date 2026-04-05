@@ -98,4 +98,7 @@ async def assemble_fastapi(parent, config: Config):
         v1.include_router(v, prefix=f"/{k}", tags=[k])
     app.include_router(v1, prefix="/v1")
 
+    for p in parent.plugin_load_order:
+        await p.setup_fastapi(app)
+
     return app

@@ -139,3 +139,9 @@ class BasePlugin:
         This is called when the game has finished loading everything else.
         """
         pass
+
+    async def setup_fastapi(self, instance):
+        """
+        This is called during setup to allow the plugin to customize the FastAPI instance.
+        """
+        pass
